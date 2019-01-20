@@ -5,7 +5,8 @@ node('generic') {
 
 
     stage ('Clone') {
-        git url: 'https://github.com/eladh/demos.git'
+        git url: 'https://github.com/eladh/demos.git' ,credentialsId: 'github'
+
     }
 
     stage ('Artifactory configuration') {
