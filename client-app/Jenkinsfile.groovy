@@ -1,5 +1,5 @@
 node('generic') {
-    def server = Artifactory.server "ARTI"
+    def server = Artifactory.server "artifactory"
     def rtNpm = Artifactory.newNpmBuild()
     def buildInfo
 
