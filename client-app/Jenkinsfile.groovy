@@ -7,28 +7,29 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
         def rtNpm = Artifactory.newNpmBuild()
         def buildInfo
 
-        container('node') {
 
-            stage('Clone') {
-                git url: 'https://github.com/eladh/demos.git', credentialsId: 'github'
+        stage ('Clone') {
+            git url: 'https://github.com/eladh/demos.git' ,credentialsId: 'github'
 
-            }
+        }
 
-            stage('Artifactory configuration') {
-                rtNpm.deployer repo: 'npm-local', server: server
-                rtNpm.resolver repo: 'npm-remote', server: server
-                buildInfo = Artifactory.newBuildInfo()
-            }
+        stage ('Artifactory configuration') {
+            rtNpm.deployer repo: 'npm-local', server: server
+            rtNpm.resolver repo: 'npm-remote', server: server
+            buildInfo = Artifactory.newBuildInfo()
+        }
 
-            stage('Install npm') {
+        stage ('Install npm') {
+            container('node') {
                 rtNpm.install buildInfo: buildInfo, path: 'client-app'
             }
+        }
 
-            stage('Build npm') {
+        stage ('Build npm') {
+            container('node') {
                 sh 'npm run build --prefix client-app'
                 sh 'cp client-app/package.json client-app/dist/'
             }
-
         }
 
 //        stage ('Publish npm') {
