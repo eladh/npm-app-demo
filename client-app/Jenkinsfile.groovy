@@ -5,7 +5,7 @@ node('generic') {
 
 
     stage ('Clone') {
-        git url: 'https://git.jfrog.info/projects/CON/repos/demos/browse/client-app'
+        git url: 'https://github.com/eladh/demos.git'
     }
 
     stage ('Artifactory configuration') {
