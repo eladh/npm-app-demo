@@ -20,13 +20,14 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
             buildInfo = Artifactory.newBuildInfo()
         }
 
-        stage ('Install npm') {
-            rtNpm.tool = 'nodejs-tool'
-            rtNpm.install buildInfo: buildInfo, path: 'client-app'
-        }
+//        stage ('Install npm') {
+//            rtNpm.tool = 'nodejs-tool'
+//            rtNpm.install buildInfo: buildInfo, path: 'client-app'
+//        }
 
         stage ('Build npm') {
             container('node') {
+                sh 'npm i --prefix client-app'
                 sh 'npm run build --prefix client-app'
                 sh 'cp client-app/package.json client-app/dist/'
             }
