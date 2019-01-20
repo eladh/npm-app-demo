@@ -7,6 +7,8 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
         def rtNpm = Artifactory.newNpmBuild()
         def buildInfo
 
+        env.NODEJS_HOME = "${tool 'nodejs-tool'}"
+
 
         stage ('Clone') {
             git url: 'https://github.com/eladh/demos.git' ,credentialsId: 'github'
