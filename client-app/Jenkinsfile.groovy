@@ -1,7 +1,5 @@
-podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
-        containerTemplate(name: 'node', image: 'node', command: 'cat', ttyEnabled: true)]) {
 
-    node('jenkins-pipeline') {
+    node('generic') {
 
         def server = Artifactory.server "artifactory"
         def rtNpm = Artifactory.newNpmBuild()
@@ -41,4 +39,3 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
 //            server.publishBuildInfo buildInfo
 //        }
     }
-}
