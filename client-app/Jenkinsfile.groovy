@@ -7,6 +7,7 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
         def rtNpm = Artifactory.newNpmBuild()
         def buildInfo
 
+        rtNpm.tool = 'nodejs-tool'
 
         stage ('Clone') {
             git url: 'https://github.com/eladh/demos.git' ,credentialsId: 'github'
@@ -30,12 +31,12 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
             }
         }
 
-//        stage ('Publish npm') {
-//            rtNpm.publish buildInfo: buildInfo, path: 'client-app/dist'
-//        }
-//
-//        stage ('Publish build info') {
-//            server.publishBuildInfo buildInfo
-//        }
+        stage ('Publish npm') {
+            rtNpm.publish buildInfo: buildInfo, path: 'client-app/dist'
+        }
+
+        stage ('Publish build info') {
+            server.publishBuildInfo buildInfo
+        }
     }
 }
