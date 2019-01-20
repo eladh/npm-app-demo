@@ -21,7 +21,6 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
         }
 
         stage ('Install npm') {
-            rtNpm.tool = 'nodejs-tool'
             rtNpm.install buildInfo: buildInfo, path: 'client-app'
         }
 
