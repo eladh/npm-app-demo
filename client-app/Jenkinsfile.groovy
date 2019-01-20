@@ -24,7 +24,7 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
         }
 
         stage ('Build npm') {
-            container('kubectl') {
+            container('node') {
                 sh 'npm run build --prefix client-app'
                 sh 'cp client-app/package.json client-app/dist/'
             }
