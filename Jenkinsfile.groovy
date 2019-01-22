@@ -53,7 +53,7 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
 
         stage ('Publish npm') {
             container('node') {
-                sh "cd dist;npm version minor ${buildNumber}  && npm publish --tag next"
+                sh "npm publish --tag next"
             }
         }
     }
