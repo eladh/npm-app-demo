@@ -33,7 +33,6 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
                     sh("curl -u${env.USERNAME}:${env.PASSWORD} http://${rtIpAddress}:80/artifactory/api/npm/auth > ~/.npmrc")
                     sh('echo "email = youremail@email.com" >> ~/.npmrc')
                     sh("npm config set registry http://${rtIpAddress}/artifactory/api/npm/npm-virtual/")
-                    sh('cat ~/.npmrc')
                 }
             }
         }
@@ -53,6 +52,12 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
 
         stage ('Publish npm') {
             container('node') {
+//
+                sh 'npm version minor'
+                sshagent(['git-ssh-key']) {
+                    sh "git commit -m 'new minor update' package.json; git push origin master;"
+                }
+
                 sh "npm publish --tag next"
             }
         }
