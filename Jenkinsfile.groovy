@@ -40,7 +40,7 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
 
         stage ('Install npm') {
             container('node') {
-                sh 'npm install --prefix client-app'
+                sh 'npm install'
             }
         }
 
