@@ -14,7 +14,7 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
         def buildUrl = env.BUILD_URL
 
         stage ('Clone') {
-            git url: 'https://github.com/eladh/demos.git' ,credentialsId: 'github'
+            git url: 'https://github.com/eladh/npm-app-demo.git' ,credentialsId: 'github'
         }
 
 
