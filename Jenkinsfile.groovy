@@ -1,7 +1,5 @@
 server = Artifactory.server "artifactory"
-rtFullUrl = server.url
-rtIpAddress = rtFullUrl - ~/^http?.:\/\// - ~/\/artifactory$/
-
+rtIpAddress = server.url - ~/^http?.:\/\// - ~/\/artifactory$/
 
 podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
         containerTemplate(name: 'node', image: 'node:8', command: 'cat', ttyEnabled: true)]) {
@@ -9,7 +7,6 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
     node('jenkins-pipeline') {
 
         def buildNumber = env.BUILD_NUMBER
-        def branchName = env.BRANCH_NAME
         def workspace = env.WORKSPACE
         def buildUrl = env.BUILD_URL
 
@@ -22,7 +19,6 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
             echo "workspace directory is $workspace"
             echo "build URL is $buildUrl"
             echo "build Number is $buildNumber"
-            echo "branch name is $branchName"
             echo "PATH is $env.PATH"
         }
 
@@ -52,12 +48,10 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
 
         stage ('Publish npm') {
             container('node') {
-//
                 sh 'npm version minor'
                 sshagent(['git-ssh-key']) {
-                    sh "git commit -m 'new minor update' package.json; git push origin master;"
+                    sh "git commit -m 'new minor update' package.json package-lock.json; git push origin master;"
                 }
-
                 sh "npm publish --tag next"
             }
         }
