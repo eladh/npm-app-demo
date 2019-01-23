@@ -23,12 +23,14 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
         }
 
         stage ('Prep env') {
+
             container('node') {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'artifactorypass',
                                   usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                     sh("curl -u${env.USERNAME}:${env.PASSWORD} http://${rtIpAddress}:80/artifactory/api/npm/auth > ~/.npmrc")
                     sh('echo "email = youremail@email.com" >> ~/.npmrc')
                     sh("npm config set registry http://${rtIpAddress}/artifactory/api/npm/npm-virtual/")
+                    sh 'npm --no-git-tag-version version minor'
                 }
             }
         }
@@ -46,13 +48,17 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
             }
         }
 
+
         stage ('Publish npm') {
-            container('node') {
-                sh 'npm version minor'
-                sshagent(['git-ssh-key']) {
-                    sh "git commit -m 'new minor update' package.json package-lock.json; git push origin master;"
-                }
-                sh "npm publish --tag next"
+            sh 'ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa'
+            sh "ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts"
+            sshagent(credentials: ['gitsshkey']) {
+                sh 'git config --global user.email "you@example.com"'
+                sh 'git config --global user.name "Your Name"'
+                sh 'git remote set-url origin "ssh://git@github.com/eladh/npm-app-demo.git" ';
+                sh 'git add package.json'
+                sh 'git commit -m "bump npm version" package.json '
+                sh 'git push origin master'
             }
         }
     }
