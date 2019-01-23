@@ -60,6 +60,9 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
                 sh 'git commit -m "bump npm version" package.json '
                 sh 'git push origin master'
             }
+            container('node') {
+                sh 'npm publish'
+            }
         }
     }
 }
