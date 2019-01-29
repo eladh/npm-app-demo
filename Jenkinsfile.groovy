@@ -14,7 +14,6 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
             git url: 'https://github.com/eladh/npm-app-demo.git' ,credentialsId: 'github'
         }
 
-
         stage('Info') {
             echo "workspace directory is $workspace"
             echo "build URL is $buildUrl"
@@ -23,7 +22,6 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
         }
 
         stage ('Prep env') {
-
             container('node') {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'artifactorypass',
                                   usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
@@ -48,7 +46,6 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
             }
         }
 
-
         stage ('Publish npm') {
             sh 'ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa'
             sh "ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts"
@@ -61,7 +58,7 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
                 sh 'git push origin master'
             }
             container('node') {
-                sh 'npm publish'
+                sh 'npm publish --prefix dist'
             }
         }
     }
