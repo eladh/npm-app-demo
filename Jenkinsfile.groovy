@@ -58,7 +58,7 @@ podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
                 sh 'git push origin master'
             }
             container('node') {
-                sh 'npm publish --prefix dist'
+                sh 'cd dist;npm publish'
             }
         }
     }
