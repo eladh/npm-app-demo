@@ -1,10 +1,10 @@
 server = Artifactory.server "artifactory"
 rtIpAddress = server.url - ~/^http?.:\/\// - ~/\/artifactory$/
 
-podTemplate(label: 'jenkins-pipeline' , cloud: 'k8s' , containers: [
+podTemplate(label: 'jenkins-pipeline-npm' , cloud: 'k8s' , containers: [
         containerTemplate(name: 'node', image: 'node:8', command: 'cat', ttyEnabled: true)]) {
 
-    node('jenkins-pipeline') {
+    node('jenkins-pipeline-npm') {
 
         def buildNumber = env.BUILD_NUMBER
         def workspace = env.WORKSPACE
