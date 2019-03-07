@@ -49,7 +49,7 @@ podTemplate(label: 'jenkins-pipeline-npm' , cloud: 'k8s' , containers: [
         stage ('Publish npm') {
             sh 'ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa'
             sh "ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts"
-            sshagent(credentials: ['gitsshkey']) {
+            sshagent(credentials: ['githubsshkey']) {
                 sh 'git config --global user.email "you@example.com"'
                 sh 'git config --global user.name "Your Name"'
                 sh 'git remote set-url origin "ssh://git@github.com/eladh/npm-app-demo.git" ';
