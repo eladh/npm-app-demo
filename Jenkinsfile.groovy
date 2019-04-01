@@ -46,6 +46,14 @@ podTemplate(label: 'jenkins-pipeline-npm' , cloud: 'k8s' , containers: [
             }
         }
 
+        stage('SonarQube analysis') {
+            def scannerHome = tool 'sonar-server-7.6';
+            withSonarQubeEnv('my-sonar-qube') {
+                sh "${scannerHome}/bin/sonar-scanner"
+            }
+        }
+
+
         stage ('Publish npm') {
             sh 'ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa'
             sh "ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts"
