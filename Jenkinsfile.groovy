@@ -47,9 +47,10 @@ podTemplate(label: 'jenkins-pipeline-npm' , cloud: 'k8s' , containers: [
         }
 
         stage('SonarQube analysis') {
+            def nodeHome = tool 'nodejs';
             def scannerHome = tool 'sonar-server-7.6';
             withSonarQubeEnv('my-sonar-qube') {
-                sh "${scannerHome}/bin/sonar-scanner "
+                sh "${scannerHome}/bin/sonar-scanner /d:sonar.nodejs.executable=${nodeHome}"
             }
         }
 
