@@ -2,7 +2,7 @@ server = Artifactory.server "artifactory"
 rtIpAddress = server.url - ~/^http?.:\/\// - ~/\/artifactory$/
 
 podTemplate(label: 'jenkins-pipeline-npm' , cloud: 'k8s' , containers: [
-        containerTemplate(name: 'java', image: 'openjdk8-jre', command: 'cat', ttyEnabled: true)]) {
+        containerTemplate(name: 'java', image: 'openjdk:8-jre', command: 'cat', ttyEnabled: true)]) {
 
     node('jenkins-pipeline-npm') {
 
