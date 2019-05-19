@@ -2,7 +2,7 @@ server = Artifactory.server "artifactory"
 rtIpAddress = server.url - ~/^http?.:\/\// - ~/\/artifactory$/
 
 podTemplate(label: 'jenkins-pipeline-npm' , cloud: 'k8s' , containers: [
-        containerTemplate(name: 'node', image: 'node:8', command: 'cat', ttyEnabled: true)]) {
+        containerTemplate(name: 'java', image: 'openjdk8-jre', command: 'cat', ttyEnabled: true)]) {
 
     node('jenkins-pipeline-npm') {
 
@@ -47,7 +47,7 @@ podTemplate(label: 'jenkins-pipeline-npm' , cloud: 'k8s' , containers: [
         }
 
         stage('SonarQube analysis') {
-            container('node') {
+            container('java') {
                 tool 'nodejs';
                 def scannerHome = tool 'sonar-server-7.6';
                 withSonarQubeEnv('my-sonar-qube') {
