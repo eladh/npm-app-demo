@@ -51,7 +51,7 @@ podTemplate(label: 'jenkins-pipeline-npm' , cloud: 'k8s' , containers: [
                 tool 'nodejs';
                 def scannerHome = tool 'sonar-server-7.6';
                 withSonarQubeEnv('my-sonar-qube') {
-                    sh "sudo ${scannerHome}/bin/sonar-scanner"
+                    sh "${scannerHome}/bin/sonar-scanner"
                 }
             }
         }
