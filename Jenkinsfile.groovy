@@ -27,7 +27,7 @@ podTemplate(label: 'jenkins-pipeline-npm' , cloud: 'k8s' , containers: [
                                   usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                     sh("curl -u${env.USERNAME}:${env.PASSWORD} http://${rtIpAddress}:80/artifactory/api/npm/auth > ~/.npmrc")
                     sh('echo "email = youremail@email.com" >> ~/.npmrc')
-                    sh("npm config set registry http://${rtIpAddress}/artifactory/api/npm/npm-virtual/")
+                    sh("npm config set registry http://${rtIpAddress}/artifactory/api/npm/npm/")
                     sh 'npm --no-git-tag-version version minor'
                 }
             }
@@ -47,10 +47,12 @@ podTemplate(label: 'jenkins-pipeline-npm' , cloud: 'k8s' , containers: [
         }
 
         stage('SonarQube analysis') {
-            tool 'nodejs';
-            def scannerHome = tool 'sonar-server-7.6';
-            withSonarQubeEnv('my-sonar-qube') {
-                sh "${scannerHome}/bin/sonar-scanner"
+            container('node') {
+                tool 'nodejs';
+                def scannerHome = tool 'sonar-server-7.6';
+                withSonarQubeEnv('my-sonar-qube') {
+                    sh "sudo ${scannerHome}/bin/sonar-scanner"
+                }
             }
         }
 
