@@ -3,7 +3,7 @@ rtIpAddress = server.url - ~/^http?.:\/\// - ~/\/artifactory$/
 
 podTemplate(label: 'jenkins-pipeline-npm' , cloud: 'k8s' , containers: [
         containerTemplate(name: 'node', image: 'node:8', command: 'cat', ttyEnabled: true),
-        containerTemplate(name: 'java', image: 'openjdk:8-jre', command: 'cat', ttyEnabled: true)]) {
+        containerTemplate(name: 'java', image: rtIpAddress + '/openjdk:8-jre', command: 'cat', ttyEnabled: true)]) {
 
     node('jenkins-pipeline-npm') {
 
@@ -59,14 +59,14 @@ podTemplate(label: 'jenkins-pipeline-npm' , cloud: 'k8s' , containers: [
         stage ('Publish npm') {
             sh 'ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa'
             sh "ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts"
-            sshagent(credentials: ['githubsshkey']) {
-                sh 'git config --global user.email "you@example.com"'
-                sh 'git config --global user.name "Your Name"'
-                sh 'git remote set-url origin "ssh://git@github.com/eladh/npm-app-demo.git" ';
-                sh 'git add package.json'
-                sh 'git commit -m "bump npm version" package.json '
-                sh 'git push origin master'
-            }
+//            sshagent(credentials: ['githubsshkey']) {
+//                sh 'git config --global user.email "you@example.com"'
+//                sh 'git config --global user.name "Your Name"'
+//                sh 'git remote set-url origin "ssh://git@github.com/eladh/npm-app-demo.git" ';
+//                sh 'git add package.json'
+//                sh 'git commit -m "bump npm version" package.json '
+//                sh 'git push origin master'
+//            }
             container('node') {
                 sh 'cd dist;npm publish'
             }
